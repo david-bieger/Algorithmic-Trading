@@ -16,13 +16,13 @@ startDate = "2020-01-01"
 
 def shouldIBuy(price, expectedValue):
     global currentlyHeld
-    if price < expectedValue and not currentlyHeld: return True  # buy if value is 2.5 percent lower than expected
+    if price < 0.98 * expectedValue and not currentlyHeld: return True  # buy if value is 2.5 percent lower than expected
     return False
 
 
 def shouldISell(price, expectedValue):
     global currentlyHeld
-    if price > expectedValue and currentlyHeld: return True  # sell if value is 2.5 percent higher than expected
+    if price > 1.02 * expectedValue and currentlyHeld: return True  # sell if value is 2.5 percent higher than expected
     return False
 
 
@@ -66,6 +66,7 @@ def main():
         else:
             expectedValue = expectedValue * expectedReturnInOneDay
             print(str(expectedValue))
+            if count % 100 == 0: expectedValue = price
         makeDecision(count, expectedValue, price)
         count += 1
 
