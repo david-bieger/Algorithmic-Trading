@@ -2,9 +2,13 @@ import yfinance as yf
 import PySimpleGUI as sg
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from datetime import date
+
+#TODO: UPDATE TO GET DATE CORRECTLY FROM INPUT
+#TODO: UPDATE TO AUTOMATICALLY RUN FOR TODAY'S DATE
 
 #global variables
-stock = "spy"
+# stock = input("Please enter the stock ticker for the stock you would like to see: ")
 prevPrice = 0.0
 price = 0.0
 down = False
@@ -79,7 +83,7 @@ def makeDecision(count, prices, brokerageValues):
     brokerageValues.append(brokerageValue)
     return [prices, brokerageValues]
 
-def main(stock = 'spy', startDate = '2023-08-01'):
+def main(stock='spy', startDate='2023-08-01'):
     global cash, up, down, price, prevPrice, currentlyHeld, startingCash, brokerageValue, originalPrice
     count = 0
     prices = []
@@ -114,11 +118,9 @@ def main(stock = 'spy', startDate = '2023-08-01'):
 def establishWindow():
     sg.theme('BlueMono')
     layout = [
-        [sg.Text("Hello from PySimpleGUI")],
-        [sg.Button("Done")],
         [sg.Text('Stock', size=(8, 1)), sg.InputText()],
-        [sg.Text("Start Date (formatted like '2023-08-09'): ", size=(8, 1)), sg.InputText()],
-        [sg.Button("Submit")]
+        [sg.Text("Start Date: ", size=(8, 1)), sg.InputText()],
+        [sg.Button("Submit"), sg.Button("Done")]
     ]
 
     # Create the window
@@ -143,14 +145,14 @@ def createPlot(prices, brokerageValues, body):
 
     for i in indexes:
         count = 0
-        if i % 66 == 0:
+        if i % 1 == 0:
             x.append(i)
             actual.append(brokerageValues[i]/startingCash)
             market.append(prices[i]/originalPrice)
             count += 1
     print(prices)
-    plt.plot(x, actual, color=color, marker='o')
-    plt.plot(x, market, color='blue', marker='o')
+    plt.plot(x, actual, color=color)
+    plt.plot(x, market, color='blue')
     plt.title("Brokerage Value in red or green compared to result of simply holding the stock in blue")
     plt.xlabel('Time (units of 5m intervals)', fontsize=14)
     plt.ylabel('Price (blue) and Brokerage Value (red/green)')
